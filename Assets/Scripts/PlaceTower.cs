@@ -7,12 +7,12 @@ public class PlaceTower : MonoBehaviour
 {
     public GameObject towerPerfab;
     private GameObject tower;
-    private GoldUI goldUI;
+    private UI UI;
 
     private bool CanPlaseTower()
     {
         int cost = towerPerfab.GetComponent<TowerData>().levels[0].cost;
-        return tower == null && goldUI.Gold >= cost;
+        return tower == null && UI.Gold >= cost;
     }
 
     private void OnMouseUp()
@@ -22,14 +22,14 @@ public class PlaceTower : MonoBehaviour
             tower = (GameObject) Instantiate(towerPerfab, transform.position, Quaternion.identity);
             AudioSource audioSource = gameObject.GetComponent<AudioSource>();
             audioSource.PlayOneShot(audioSource.clip);
-            goldUI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
+            UI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
         }
         else if (UpgradeMonster())
         {
             tower.GetComponent<TowerData>().IncreaseLevel();
             AudioSource audioSource = gameObject.GetComponent<AudioSource>();
             audioSource.PlayOneShot(audioSource.clip);
-            goldUI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
+            UI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
         }
     }
 
@@ -40,7 +40,7 @@ public class PlaceTower : MonoBehaviour
             TowerData towerData = tower.GetComponent<TowerData>();
             TowerLevel nextLevel = towerData.GetNextLevel();
             int cost = nextLevel.cost;
-            if (nextLevel != null && goldUI.Gold >= cost)
+            if (nextLevel != null && UI.Gold >= cost)
             {
                 return true;
             }
@@ -50,6 +50,6 @@ public class PlaceTower : MonoBehaviour
 
     private void Start()
     {
-        goldUI = GameObject.Find("Gold").GetComponent<GoldUI>();
+        UI = GameObject.Find("Gold").GetComponent<UI>();
     }
 }

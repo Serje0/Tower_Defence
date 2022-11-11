@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PathCreation;
 using UnityEngine;
 
 public class MoveEnemy : MonoBehaviour
@@ -8,6 +9,10 @@ public class MoveEnemy : MonoBehaviour
     [HideInInspector] public GameObject[] waypoints;
     private int currentWaypoint = 0;
     private float lastWaypointSwitchTime;
+
+    /*public PathCreator pathCreator; //= GameObject.Find("PathWay").GetComponent<PathCreator>();
+    private float distanceTravelled;*/
+
     public float speed = 1.0f;
 
     private void Start()
@@ -17,6 +22,10 @@ public class MoveEnemy : MonoBehaviour
 
     private void Update()
     {
+        /*distanceTravelled += speed * Time.deltaTime;
+        transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled);
+        transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled);*/
+
         Vector3 startPosition = waypoints[currentWaypoint].transform.position;
         Vector3 endPosition = waypoints[currentWaypoint + 1].transform.position;
         float pathLength = Vector3.Distance(startPosition, endPosition);
@@ -30,31 +39,37 @@ public class MoveEnemy : MonoBehaviour
                 currentWaypoint++;
                 lastWaypointSwitchTime = Time.time;
 
+                /*//Vector3 nextPosition = waypoints[currentWaypoint + 1].transform.position;
                 Debug.Log(gameObject.transform.position.x.Equals(waypoints[currentWaypoint + 1].transform.position.x));
                 Debug.Log(gameObject.transform.position.x);
-                Debug.Log(waypoints[currentWaypoint + 2].transform.position.x);
+                Debug.Log(waypoints[currentWaypoint + 1].transform.position.x);
                 if (gameObject.transform.position.x.Equals(waypoints[currentWaypoint + 1].transform.position.x))
                 {
                     if ((gameObject.transform.position.x - waypoints[currentWaypoint + 1].transform.position.x) > 0)
                     {
-                        gameObject.transform.rotation = Quaternion.Euler(0, 0, gameObject.transform.rotation.z + 90);
+                        //gameObject.transform.rotation = Quaternion.AngleAxis(0, 0, gameObject.transform.rotation.z + 90);
+                        gameObject.transform.Rotate(0,0, gameObject.transform.rotation.z - 90);
                     }
                     else
                     {
-                        gameObject.transform.rotation = Quaternion.Euler(0, 0, gameObject.transform.rotation.z + 270);
+                        //gameObject.transform.rotation = Quaternion.AngleAxis(0, 0, gameObject.transform.rotation.z + 270);
+                        gameObject.transform.Rotate(0,0, gameObject.transform.rotation.z + 90 );
                     }
                 }
                 else
                 {
                     if ((gameObject.transform.position.y - waypoints[currentWaypoint + 1].transform.position.y) > 0)
                     {
-                        gameObject.transform.rotation = Quaternion.Euler(0, 0, gameObject.transform.rotation.z + 90);
+                        //gameObject.transform.rotation = Quaternion.AngleAxis(0, 0, gameObject.transform.rotation.z + 90);
+                        gameObject.transform.Rotate(0,0, gameObject.transform.rotation.z - 90);
                     }
                     else
                     {
-                        gameObject.transform.rotation = Quaternion.Euler(0, 0, gameObject.transform.rotation.z + 270);
+                        //gameObject.transform.rotation = Quaternion.AngleAxis(0, 0, gameObject.transform.rotation.z + 270);
+                        gameObject.transform.Rotate(0,0, gameObject.transform.rotation.z + 90 );
                     }
-                }
+                }*/
+                RotateMove();
             }
             else
             {
@@ -64,5 +79,19 @@ public class MoveEnemy : MonoBehaviour
                 AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
             }
         }
+    }
+
+    void RotateMove()
+    {
+        Vector3 newStartPosition = waypoints[currentWaypoint].transform.position;
+        Vector3 newEndPosition = waypoints[currentWaypoint + 1].transform.position;
+        Vector3 newDirection = (newEndPosition - newStartPosition);
+        
+        float x = newDirection.x;
+        float y = newDirection.y;
+        float rotationAngle = Mathf.Atan2(y, x) * 180 / Mathf.PI;
+        
+        GameObject enemy = this.transform.gameObject;
+        enemy.transform.rotation = Quaternion.AngleAxis(rotationAngle, Vector3.forward);
     }
 }
