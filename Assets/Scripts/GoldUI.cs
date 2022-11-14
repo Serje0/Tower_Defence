@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI : MonoBehaviour
+public class GoldUI : MonoBehaviour
 {
     public Text goldText;
     private int gold;
@@ -24,11 +24,5 @@ public class UI : MonoBehaviour
     void Start()
     {
         Gold = 1000;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

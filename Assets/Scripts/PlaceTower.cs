@@ -7,7 +7,7 @@ public class PlaceTower : MonoBehaviour
 {
     public GameObject towerPerfab;
     private GameObject tower;
-    private UI UI;
+    private GoldUI UI;
 
     private bool CanPlaseTower()
     {
@@ -50,6 +50,6 @@ public class PlaceTower : MonoBehaviour
 
     private void Start()
     {
-        UI = GameObject.Find("Gold").GetComponent<UI>();
+        UI = GameObject.Find("Gold").GetComponent<GoldUI>();
     }
 }
