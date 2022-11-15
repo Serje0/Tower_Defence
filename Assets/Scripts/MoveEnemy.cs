@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class MoveEnemy : MonoBehaviour
 {
-    [HideInInspector] public GameObject[] waypoints;
+    [HideInInspector] 
+    public GameObject[] waypoints;
     private int currentWaypoint = 0;
     private float lastWaypointSwitchTime;
 
@@ -15,9 +16,12 @@ public class MoveEnemy : MonoBehaviour
 
     public float speed = 1.0f;
 
+    private HealthUI healthUI;
+
     private void Start()
     {
         lastWaypointSwitchTime = Time.time;
+        healthUI = GameObject.Find("Health").GetComponent<HealthUI>();
     }
 
     private void Update()
@@ -77,6 +81,8 @@ public class MoveEnemy : MonoBehaviour
 
                 AudioSource audioSource = gameObject.GetComponent<AudioSource>();
                 AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
+                
+                healthUI.Health -= 1;
             }
         }
     }
