@@ -5,35 +5,61 @@ using UnityEngine;
 
 public class PlaceTower : MonoBehaviour
 {
-    public GameObject towerPerfab;
+    public GameObject towerPrefab;
     private GameObject tower;
     private GoldUI UI;
+    public int numberTower = -1;
 
-    private bool CanPlaseTower()
+    private Shop shop;
+
+    public bool CanPlaseTower()
     {
-        int cost = towerPerfab.GetComponent<TowerData>().levels[0].cost;
+        int cost = towerPrefab.GetComponent<TowerData>().levels[0].cost;
         return tower == null && UI.Gold >= cost;
     }
 
     private void OnMouseUp()
     {
-        if (CanPlaseTower())
+        if (shop.ShopUI.active == false && shop.upgradeTowers[0].active == false &&
+            shop.upgradeTowers[1].active == false)
         {
-            tower = (GameObject) Instantiate(towerPerfab, transform.position, Quaternion.identity);
-            AudioSource audioSource = gameObject.GetComponent<AudioSource>();
-            audioSource.PlayOneShot(audioSource.clip);
-            UI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
-        }
-        else if (UpgradeMonster())
-        {
-            tower.GetComponent<TowerData>().IncreaseLevel();
-            AudioSource audioSource = gameObject.GetComponent<AudioSource>();
-            audioSource.PlayOneShot(audioSource.clip);
-            UI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
+            if (tower == null)
+            {
+                shop.OpenShop(this.gameObject.GetComponent<PlaceTower>());
+            }
+            else if (tower != null && numberTower != -1)
+            {
+                shop.OpenUpgradeShop(this.gameObject.GetComponent<PlaceTower>());
+            }
         }
     }
 
-    private bool UpgradeMonster()
+    public void CreateTower()
+    {
+        tower = (GameObject) Instantiate(towerPrefab, transform.position, Quaternion.identity);
+        switch (towerPrefab.name)
+        {
+            case "Tower_1":
+                numberTower = 1;
+                break;
+            case "Tower_2":
+                numberTower = 2;
+                break;
+        }
+        AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource.PlayOneShot(audioSource.clip);
+        UI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
+    }
+    
+    public void UpgradeTower()
+    {
+        tower.GetComponent<TowerData>().IncreaseLevel();
+        AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource.PlayOneShot(audioSource.clip);
+        UI.Gold -= tower.GetComponent<TowerData>().CurrentLevel.cost;
+    }
+
+    public bool CanUpgradeTower()
     {
         if (tower != null)
         {
@@ -51,5 +77,6 @@ public class PlaceTower : MonoBehaviour
     private void Start()
     {
         UI = GameObject.Find("Gold").GetComponent<GoldUI>();
+        shop = GameObject.Find("Shop").GetComponent<Shop>();
     }
 }

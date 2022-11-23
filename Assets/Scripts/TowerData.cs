@@ -8,6 +8,8 @@ public class TowerLevel
 {
     public int cost;
     public GameObject visualization;
+    public GameObject bullet;
+    public float fireRate;
 }
 public class TowerData : MonoBehaviour
 {
@@ -69,15 +71,5 @@ public class TowerData : MonoBehaviour
         {
             CurrentLevel = levels[currentLevelIndex + 1];
         }
-    }
-
-    void Start()
-    {
-        
-    }
-    
-    void Update()
-    {
-        
     }
 }

@@ -17,7 +17,7 @@ public class GoldUI : MonoBehaviour
         set
         {
             gold = value;
-            goldText./*GetComponent<Text>().*/text = gold + "$";
+            goldText.text = gold + "$";
         }
     }
     
